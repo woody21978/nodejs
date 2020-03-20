@@ -17,12 +17,9 @@ app.get('/users', function (req, res) {
   /*
     На данном маршруте нужно вывести содержимое файла users.dat
   */
-  fs.readFile("users.data", "utf8",
-    function (error, data) {
-      console.log("Асинхронное чтение файла");
-      if (error) throw error; // если возникла ошибка
-      console.log(data);  // выводим считанные данные
-    });
+  let rawdata = fs.readFileSync('users.data', 'utf-8');
+  let student = JSON.parse(rawdata);
+  console.log(student);
   res.send('Маршрут для вывод содержимого файла пользователей');
 });
 
@@ -35,18 +32,13 @@ app.post('/user-register', function (req, res) {
   */
   console.log('Пришли данные с клиента', req.body);
   res.send('Маршрут для регистрации пользователя');
-  const data = fs.readFileSync('users.data');
-  if (data === "") {
+  let check_file = fs.readFileSync('users.data');
+  if (check_file == "") {
     fs.writeFile("users.data", JSON.stringify(req.body), function (error) {
-  
       if (error) throw error; // если возникла ошибка
-      console.log("Асинхронная запись файла завершена. Содержимое файла:");
-      let data = fs.readFileSync("users.data", "utf8");
-      console.log(data);  // выводим считанные данные
     });
-  }
-  else {
-    let newData = data + ", /n" + JSON.stringify(req.body);
+  } else {
+    let newData = check_file + ", \n" + JSON.stringify(req.body);
     fs.writeFileSync('users.data', newData);
   }
 });
