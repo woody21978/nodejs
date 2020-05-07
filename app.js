@@ -20,28 +20,30 @@ document.querySelector(".registration-form").onsubmit = function (event) {
   // пример маршрута POST /user
 };
 
-window.onload = function () {
-  // TODO: GET запрос (GET /users)
-  // полученные данные выведите в DOM (.user-list)
-  // ${formattedJson}
-  let users = document.querySelector('.user-list'),
-    user = document.createElement('div'),
-    name = document.createElement('strong'),
-    email = document.createElement('div');
-  user.classList.add('user');
-  name.innerHTML;
+function updateUI(usersList) {
+  document.querySelector('.user-list').innerHTML = '';
+  for (let i = 0; i < usersList.length; i++) {
+    let div = document.createElement('div');
+    div.classList.add('user');
+    div.innerHTML = `<strong>${usersList[i].username}</strong>` + 
+    `<div>${usersList[i].email}</div>`;
+    document.querySelector('.user-list').appendChild(div);
+  }
+}
+
+function getUsers() {
   fetch('http://localhost:80/users')
-    .then(function (res) {
+    .then(function(res) {
       if (res.status === 200 && res.ok) {
         res.json().then(result => {
-          console.log(true);
+          updateUI(result);
         });
       }
     })
-    .catch(function (res) {
+    .catch(function(res) {
       console.log(res);
     });
-  user.appendChild(name);
-  user.appendChild(email);
-  users.appendChild(user);
+}
+window.onload = function() {
+  getUsers();
 };

@@ -13,14 +13,18 @@ app.use(bodyParser.json());
 // разрешаем CORS запросы на стороне сервера
 app.use(cors());
 
-app.get('/users', function (req, res) {
-  /*
-    На данном маршруте нужно вывести содержимое файла users.dat
-  */
-  let rawdata = fs.readFileSync('users.data', 'utf-8');
-  let student = JSON.parse(rawdata);
-  console.log(student);
-  res.send('Маршрут для вывод содержимого файла пользователей');
+app.get('/users', (req, res) => {
+  //Проверка на существование файла
+  if (!fs.existsSync('users.data')) {
+    fs.writeFile('users.data', "", function(err) {
+      if (err) {
+        return console.log(err);
+      }
+    });
+  };
+
+  const data = fs.readFileSync('users.data', 'utf-8');
+  res.send("[" + data + "]");
 });
 
 app.post('/user-register', function (req, res) {
