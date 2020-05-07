@@ -8,13 +8,21 @@ document.querySelector(".registration-form").onsubmit = function (event) {
     email: email
   }
 
-  fetch('http://localhost/user-register', {
-    method: 'POST',
+  fetch('http://localhost:80/user-reg', {
     headers: {
-      'Content-Type': 'application/json;charset=utf-8'
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
     },
+    method: 'post',
+    mode: 'no-cors',
     body: JSON.stringify(data)
-  });
+  })
+    .then(function(res) {
+      getUsers();
+    })
+    .catch(function(res) {
+      console.log(res);
+    });
 
   // TODO: сделайте POST запрос на ваш сервер для сохранения пользователя
   // пример маршрута POST /user
